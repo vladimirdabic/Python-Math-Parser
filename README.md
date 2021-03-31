@@ -4,7 +4,7 @@ A simple math parser, supports functions and variables.
 > 2+2*2
 6
 > cos(0)
-0.0
+1.0
 > (2+2)*2
 8
 ```
