@@ -41,4 +41,5 @@ class Interpreter:
         if not callable(value_to_call):
             raise Exception("Tried calling a non callable value")
 
-        return value_to_call(self.evaluate(arg) for arg in node.args)
+        args = (self.evaluate(arg) for arg in node.args)
+        return value_to_call(*args)
