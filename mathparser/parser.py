@@ -1,4 +1,4 @@
-from .classes import NumberNode, BinOp, AssignVar, Variable, Call, ArrayNode, IndexFrom, SetAtIndex
+from .classes import *
 
 
 class Parser:
@@ -135,3 +135,31 @@ class Parser:
     def advance(self):
         self.current += 1
         return self.previous()
+
+
+def pretty_print(node, indent="", is_last=True):
+    # │   
+    # ├── 
+    # └── 
+
+    start = "└── " if is_last else "├── "
+
+    if type(node) == str:
+        print(indent + start + node)
+        return
+
+    print(indent + start + type(node).__name__, end='')
+
+
+    if type(node) == Token:
+        print(" " + node.lexeme)
+        return
+
+    print()
+
+    indent += "    " if is_last else "│   "
+
+    children = node.children
+
+    for i, child in enumerate(children):
+        pretty_print(child, indent=indent, is_last=i == len(children)-1)

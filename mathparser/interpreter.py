@@ -54,7 +54,11 @@ class Interpreter:
             raise Exception("Tried indexing from a non list value")
 
         idx = self.evaluate(node.idx)
-        return value[idx]
+
+        try:
+            return value[idx]
+        except IndexError:
+            return 0
 
     def eval_SetAtIndex(self, node):
         value = self.evaluate(node.value)
@@ -65,6 +69,9 @@ class Interpreter:
         idx = self.evaluate(node.idx)
         new = self.evaluate(node.new)
 
-        value[idx] = new
+        try:
+            value[idx] = new
+        except IndexError:
+            return 0
 
         return new
