@@ -52,3 +52,27 @@ class Call:
 
     def __repr__(self):
         return f"Call({self.value}, {self.args})"
+
+class ArrayNode:
+    def __init__(self, elements):
+        self.elements = elements
+
+    def __repr__(self):
+        return f"Array{self.elements}"
+
+class IndexFrom:
+    def __init__(self, value, idx):
+        self.value = value
+        self.idx = idx
+
+    def __repr__(self):
+        return f"IndexFrom({self.value}: {self.idx})"
+
+class SetAtIndex:
+    def __init__(self, value, idx, new):
+        self.value = value
+        self.idx = idx
+        self.new = new
+
+    def __repr__(self):
+        return f"SetAtIndex({self.value}: {self.idx})"

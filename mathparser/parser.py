@@ -1,4 +1,4 @@
-from .classes import NumberNode, BinOp, AssignVar, Variable, Call
+from .classes import NumberNode, BinOp, AssignVar, Variable, Call, ArrayNode, IndexFrom, SetAtIndex
 
 
 class Parser:
@@ -14,8 +14,10 @@ class Parser:
         while self.match('='):
             if type(left) == Variable:
                 left = AssignVar(left.name, self.parseAssign())
+            elif type(left) == IndexFrom:
+                left = SetAtIndex(left.value, left.idx, self.parseAssign())
             else:
-                raise Exception("Invalid assignment target (Must be a variable name)")
+                raise Exception("Invalid assignment target (Must be a variable name or array index)")
 
         return left
     
@@ -53,8 +55,16 @@ class Parser:
     def parseCall(self):
         left = self.parsePrimary()
 
-        while self.match('('):
-            left = self.finishCall(left)
+
+        while True:
+            if self.match('('):
+                left = self.finishCall(left)
+            elif self.match('['):
+                idx = self.parseAssign()
+                self.consume(']', "Expected ']' after indexing expression")
+                left = IndexFrom(left, idx)
+            else:
+                break
 
         return left
 
@@ -81,6 +91,17 @@ class Parser:
             expr = self.parseAssign()
             self.consume(')', "Expected ')' after grouping expression")
             return expr
+
+        if self.match('['):
+            elements = []
+
+            if not self.check(']'):
+                while True:
+                    elements.append(self.parseAssign())
+                    if not self.match(','): break
+
+            self.consume(']', "Expected ']' after array value")
+            return ArrayNode(elements)
 
         raise Exception("Expected expression")
 

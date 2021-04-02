@@ -43,3 +43,28 @@ class Interpreter:
 
         args = (self.evaluate(arg) for arg in node.args)
         return value_to_call(*args)
+
+    def eval_ArrayNode(self, node):
+        return [self.evaluate(element) for element in node.elements]
+
+    def eval_IndexFrom(self, node):
+        value = self.evaluate(node.value)
+
+        if not isinstance(value, list):
+            raise Exception("Tried indexing from a non list value")
+
+        idx = self.evaluate(node.idx)
+        return value[idx]
+
+    def eval_SetAtIndex(self, node):
+        value = self.evaluate(node.value)
+
+        if not isinstance(value, list):
+            raise Exception("Tried setting at index in a non list value")
+
+        idx = self.evaluate(node.idx)
+        new = self.evaluate(node.new)
+
+        value[idx] = new
+
+        return new

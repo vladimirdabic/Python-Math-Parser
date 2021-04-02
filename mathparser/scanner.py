@@ -23,7 +23,7 @@ class Scanner:
     def scanToken(self):
         c = self.advance()
 
-        if c in "+-*/^()=,":
+        if c in "+-*/^()=,[]":
             self.addToken(c)
         elif c == '\n':
             self.line += 1
